@@ -784,8 +784,14 @@ function setMatchWinner(roundIndex, matchIndex, winnerTeam, fromClick = true) {
   const match = winnersBracket[roundIndex][matchIndex];
   if (!match) return;
 
-  match.winner = winnerTeam;
-  ensureTournamentLocked();
+    match.winner = winnerTeam;
+
+  // Only lock the tournament when the TD actually clicks a winner,
+  // not when byes are auto-advanced.
+  if (fromClick) {
+    ensureTournamentLocked();
+  }
+
 
   let loserTeam = null;
   if (match.team1 && match.team2) {
@@ -2089,3 +2095,4 @@ function loadTournamentState() {
     alert("Failed to load saved tournament state.");
   }
 }
+
