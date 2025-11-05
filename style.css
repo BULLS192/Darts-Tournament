@@ -1,3 +1,5 @@
+/* Global layout */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -10,10 +12,9 @@ header {
   padding: 16px 24px;
   border-bottom: 1px solid #374151;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
   justify-content: space-between;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 h1 {
@@ -24,7 +25,6 @@ h1 {
 header p {
   margin: 4px 0 0;
   color: #9ca3af;
-  flex: 1 1 100%;
 }
 
 #toggle-display-mode-btn {
@@ -84,7 +84,7 @@ h3 {
   margin-top: 2px;
 }
 
-/* FORMS & TABLES */
+/* Forms & inputs */
 
 form {
   margin-bottom: 16px;
@@ -98,6 +98,7 @@ form {
   display: flex;
   gap: 16px;
   margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 
 label {
@@ -138,6 +139,8 @@ button:disabled {
 button:hover:not(:disabled) {
   background: #2563eb;
 }
+
+/* Tables */
 
 table {
   width: 100%;
@@ -181,10 +184,10 @@ footer {
   background: #7f1d1d;
 }
 
-/* BRACKET VIEW – multi-round with SVG connecting lines */
+/* BRACKET VIEW + SVG LINES */
 
 .bracket-container {
-  position: relative;          /* so SVG can overlay */
+  position: relative;
   display: flex;
   gap: 40px;
   overflow-x: auto;
@@ -202,18 +205,26 @@ footer {
   padding-top: 12px;
 }
 
-/* each column is a round */
+/* each column = round */
 .bracket-round {
   min-width: 260px;
   display: flex;
   flex-direction: column;
-  gap: 40px;              /* space between pairs */
+  gap: 40px;
 }
 
-/* one or two matches that feed into a match in the next round */
+.bracket-round-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+/* group one or two matches feeding into next round */
 .match-pair {
   position: relative;
-  padding-right: 30px;    /* visual gap before the next column */
+  padding-right: 30px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -223,7 +234,7 @@ footer {
   gap: 0;
 }
 
-/* SVG overlay for bracket lines */
+/* SVG overlay for brackets */
 .svg-connector-layer {
   position: absolute;
   top: 0;
@@ -232,7 +243,7 @@ footer {
   overflow: visible;
 }
 
-/* match cards */
+/* match card */
 
 .match-box {
   border: 2px solid #374151;
@@ -259,7 +270,7 @@ footer {
   padding: 2px 0;
 }
 
-/* FINALS SECTION */
+/* FINALS */
 
 .finals-matches {
   margin-top: 8px;
@@ -290,26 +301,37 @@ footer {
   margin: 4px 0;
 }
 
-/* MYSTERY OUT 3-COLUMN LAYOUT */
+/* MYSTERY OUT – larger font, 6 columns */
+
+#mystery-out-columns {
+  max-height: 720px;          /* good for iPad landscape */
+  overflow-y: auto;
+}
 
 .mystery-columns {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 4px;
 }
 
 .mystery-table {
   width: 100%;
-  min-width: 220px;
+  min-width: 0;
+}
+
+.mystery-table th,
+.mystery-table td {
+  padding: 3px 6px;
+  font-size: 12px;
+  line-height: 1.2;
 }
 
 /* DISPLAY MODE (pub view) */
 
-body.display-mode form,
 body.display-mode #players-section,
 body.display-mode #teams-section,
 body.display-mode #mystery-out-section,
+body.display-mode #special-shots-section,
 body.display-mode #payouts-section {
   display: none;
 }
@@ -326,7 +348,7 @@ body.display-mode #matches-section {
   padding-top: 24px;
 }
 
-/* RESPONSIVE */
+/* Responsive */
 
 @media (max-width: 768px) {
   .form-row {
@@ -346,7 +368,8 @@ body.display-mode #matches-section {
     flex: initial;
   }
 
+  /* for smaller screens, we can reduce columns a bit */
   .mystery-columns {
-    flex-direction: column;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
