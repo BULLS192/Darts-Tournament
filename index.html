@@ -2,16 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Darts Tournament Manager - V1</title>
+  <title>Darts Tournament Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Darts Tournament Manager (Browser Version V1)</h1>
-    <p>
-      Step 1: Add players → Step 2: Build teams → Step 3: Brackets + Finals →
-      Step 4: Mystery Out → Step 5: Payouts
-    </p>
+    <div>
+      <h1>DartsTournament</h1>
+      <p>
+        Step 1: Players → Step 2: Teams → Step 3: Brackets & Boards →
+        Step 4: Mystery Out → Step 5: Big Hits → Step 6: Payouts
+      </p>
+    </div>
     <button id="toggle-display-mode-btn">Toggle Display Mode</button>
   </header>
 
@@ -32,7 +35,7 @@
         <div class="summary-sub">2 players per team</div>
       </div>
       <div class="summary-item">
-        <div class="summary-label">First Round Matches</div>
+        <div class="summary-label">R1 Matches</div>
         <div class="summary-value" id="summary-matches-total">0</div>
         <div class="summary-sub">Winner bracket</div>
       </div>
@@ -78,9 +81,7 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Filled by JS -->
-      </tbody>
+      <tbody></tbody>
     </table>
 
     <h3>Saved Player Database</h3>
@@ -89,9 +90,8 @@
       <button type="button" id="clear-saved-players-btn">Clear Saved Player Database</button>
     </div>
     <p class="note">
-      Every new player you add is remembered in this browser as part of a player database.  
-      “Load Saved Players” pulls them into a new tournament so you don’t have to re-type names.
-      Clearing the database does <strong>not</strong> remove players from the current tournament.
+      Every new player you add is remembered locally as a player database. Use
+      “Load Saved Players” to pull them into a new tournament.
     </p>
   </section>
 
@@ -101,7 +101,7 @@
 
     <h3>Option A – Blind Draw (Random Teams of 2)</h3>
     <button id="generate-teams-btn">Generate Teams (2 players per team)</button>
-    <p class="note">* This will overwrite any existing teams and re-generate them randomly.</p>
+    <p class="note">This overwrites existing teams and re-randomizes them.</p>
 
     <h3>Option B – Manual Team Creation</h3>
     <form id="manual-team-form">
@@ -115,8 +115,7 @@
       </div>
       <button type="submit">Add Team Manually</button>
       <p class="note">
-        Players already assigned to a team are not shown here.  
-        Use this if you want to choose partners instead of blind draw.
+        Players already assigned to a team are hidden. Use this to choose partners instead of blind draw.
       </p>
     </form>
 
@@ -129,58 +128,39 @@
           <th>Player 2</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Filled by JS -->
-      </tbody>
+      <tbody></tbody>
     </table>
-    <p class="note">* If there is an odd number of players, the last player will be listed as “waiting for partner / bye”.</p>
   </section>
 
-  <!-- STEP 3: BRACKETS + FINALS -->
+  <!-- STEP 3: BRACKETS, BOARDS, FINALS -->
   <section id="matches-section">
-    <h2>Step 3 – Brackets</h2>
+    <h2>Step 3 – Brackets & Boards</h2>
     <div class="form-row">
       <button id="generate-matches-btn">Generate Winner Bracket</button>
-        <button id="reseed-bracket-btn">Reseed Bracket (Randomize Again)</button>
-  <p class="note">
-    You can reshuffle the team order before any match begins.  
-    Once matches are underway, reseeding will be disabled.
-  </p>
-
+      <button id="reseed-bracket-btn">Reseed Bracket (Randomize)</button>
     </div>
+    <p class="note">
+      Click a match box in the bracket to select the winner. Assign boards per match via dropdown (Boards 1–20).
+    </p>
 
-    <h3>Winner Bracket – Round 1 Matches (List)</h3>
+    <h3>Winner Bracket – Round 1 Matches</h3>
     <table id="matches-table">
       <thead>
         <tr>
           <th>Match #</th>
           <th>Team A</th>
           <th>Team B</th>
+          <th>Board</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Filled by JS -->
-      </tbody>
+      <tbody></tbody>
     </table>
-    <p class="note">
-      * This list shows only Round 1 matches on the winner side.  
-      Round 1 BYEs automatically advance to Round 2.  
-      Click matches in the visual bracket below to pick winners.
-    </p>
 
     <h3>Winner Bracket (Visual)</h3>
-    <div id="winners-bracket" class="bracket-container bracket-container-top">
-      <!-- Filled by JS -->
-    </div>
+    <div id="winners-bracket" class="bracket-container bracket-container-top"></div>
 
     <h3>Loser Bracket (Visual)</h3>
-    <div id="losers-bracket" class="bracket-container bracket-container-bottom">
-      <!-- Filled by JS -->
-    </div>
-    <p class="note">
-      Winner bracket losers drop to the loser bracket (first loss).  
-      In the loser bracket, a second loss eliminates a team.
-    </p>
+    <div id="losers-bracket" class="bracket-container bracket-container-bottom"></div>
 
     <h3>Finals / King Seat</h3>
     <div id="finals-section-inner">
@@ -212,9 +192,7 @@
     </div>
 
     <h3>Standings</h3>
-    <div id="standings-panel">
-      <!-- Filled by JS -->
-    </div>
+    <div id="standings-panel"></div>
 
     <h3>Tournament State</h3>
     <div class="form-row">
@@ -224,7 +202,28 @@
     <p class="note">Saved locally in this browser only.</p>
   </section>
 
-  <!-- STEP 4: MYSTERY OUT (MASTER OUT NUMBERS) -->
+  <!-- COURT ASSIGNMENTS -->
+  <section id="court-assignment-section">
+    <h2>Court Assignments</h2>
+    <p class="note">
+      Shows all active matches that have a board assigned. Use this view on a
+      separate screen near the boards.
+    </p>
+    <table id="court-table">
+      <thead>
+        <tr>
+          <th>Board</th>
+          <th>Bracket</th>
+          <th>Round</th>
+          <th>Match #</th>
+          <th>Teams</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- STEP 4: MYSTERY OUT -->
   <section id="mystery-out-section">
     <h2>Step 4 – Mystery Out (Master Out 1–180)</h2>
 
@@ -233,68 +232,93 @@
         <label>Winning player:
           <select id="mysteryPlayerSelect"></select>
         </label>
-        <label>Out number (Master Out 1–180):
-          <input
-            type="number"
-            id="mysteryOutNumber"
-            min="1"
-            max="180"
-            placeholder="e.g. 32, 40, 72, 120"
-          />
+        <label>Out number (1–180):
+          <input type="number" id="mysteryOutNumber" min="1" max="180" />
         </label>
       </div>
       <button type="submit">Record Mystery Out</button>
       <p class="note">
-        Use this after a player wins a 501 game (Master Out).  
-        Enter the final score they checked out on (doubles/triples/bull).
-        Impossible checkout numbers (e.g. 1, 179) are rejected and show as “No Out”.
+        Click a number in the board to choose a player right in the grid, or use this form. Only valid Master Out numbers (double/triple/bull finish) are accepted.
       </p>
     </form>
 
     <h3>Mystery Out Board (1–180)</h3>
-    <div id="mystery-out-columns" class="mystery-columns">
-      <table class="mystery-table">
-        <thead>
-          <tr>
-            <th>Out #</th>
-            <th>Status / First Player</th>
-            <th>Others</th>
-          </tr>
-        </thead>
-        <tbody id="mystery-out-table-1"></tbody>
-      </table>
+    <div id="mystery-out-columns">
+      <div class="mystery-columns">
+        <table class="mystery-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Hit</th>
+              <th>Others</th>
+            </tr>
+          </thead>
+          <tbody id="mystery-out-table-1"></tbody>
+        </table>
 
-      <table class="mystery-table">
-        <thead>
-          <tr>
-            <th>Out #</th>
-            <th>Status / First Player</th>
-            <th>Others</th>
-          </tr>
-        </thead>
-        <tbody id="mystery-out-table-2"></tbody>
-      </table>
+        <table class="mystery-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Hit</th>
+              <th>Others</th>
+            </tr>
+          </thead>
+          <tbody id="mystery-out-table-2"></tbody>
+        </table>
 
-      <table class="mystery-table">
-        <thead>
-          <tr>
-            <th>Out #</th>
-            <th>Status / First Player</th>
-            <th>Others</th>
-          </tr>
-        </thead>
-        <tbody id="mystery-out-table-3"></tbody>
-      </table>
+        <table class="mystery-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Hit</th>
+              <th>Others</th>
+            </tr>
+          </thead>
+          <tbody id="mystery-out-table-3"></tbody>
+        </table>
+
+        <table class="mystery-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Hit</th>
+              <th>Others</th>
+            </tr>
+          </thead>
+          <tbody id="mystery-out-table-4"></tbody>
+        </table>
+
+        <table class="mystery-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Hit</th>
+              <th>Others</th>
+            </tr>
+          </thead>
+          <tbody id="mystery-out-table-5"></tbody>
+        </table>
+
+        <table class="mystery-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Hit</th>
+              <th>Others</th>
+            </tr>
+          </thead>
+          <tbody id="mystery-out-table-6"></tbody>
+        </table>
+      </div>
     </div>
     <p class="note">
-      All numbers from 1 to 180 are shown.  
-      If a number has no possible out, its status shows <strong>No Out</strong>.  
-      If an out is possible but nobody has hit it yet, the status cell is blank.
+      Numbers with no possible Master Out show “No Out”. Possible but unhit numbers are blank until someone hits them.
     </p>
   </section>
 
   <!-- STEP 5: BIG HITS -->
-  <section id="big-hits-section">
+  <section id="special-shots-section">
     <h2>Step 5 – Big Hits</h2>
 
     <form id="feats-form">
@@ -302,9 +326,9 @@
         <label>Player:
           <select id="featPlayerSelect"></select>
         </label>
-        <label>Shot type:
+        <label>Big Hit:
           <select id="featTypeSelect">
-            <option value="">Select shot…</option>
+            <option value="">Select…</option>
             <option value="High-Ton">High-Ton</option>
             <option value="White Horse">White Horse</option>
             <option value="9-Mark">9-Mark</option>
@@ -314,7 +338,7 @@
       </div>
       <button type="submit">Record Big Hit</button>
       <p class="note">
-        Use this to track highlight shots during the tournament.
+        Use this to track big highlight shots during the tournament.
       </p>
     </form>
 
@@ -324,22 +348,17 @@
         <tr>
           <th>#</th>
           <th>Player</th>
-          <th>Shot</th>
+          <th>Big Hit</th>
           <th>Time</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Filled by JS -->
-      </tbody>
+      <tbody></tbody>
     </table>
   </section>
 
   <!-- STEP 6: PAYOUTS -->
-
-
-  <!-- STEP 5: PAYOUTS -->
   <section id="payouts-section">
-    <h2>Step 5 – Payouts</h2>
+    <h2>Step 6 – Payouts</h2>
 
     <form id="payout-form">
       <div class="form-row">
@@ -355,14 +374,71 @@
         <label>Mystery Out %:
           <input type="number" id="payoutMysteryPercent" min="0" max="100" value="10" />
         </label>
+        <label>Mystery Out (fixed):
+          <input type="number" id="payoutMysteryFixed" min="0" step="0.01" placeholder="optional" />
+        </label>
+      </div>
+
+      <div class="form-row">
         <label>1st place %:
           <input type="number" id="payoutFirstPercent" min="0" max="100" value="50" />
         </label>
+        <label>1st place (fixed):
+          <input type="number" id="payoutFirstFixed" min="0" step="0.01" placeholder="optional" />
+        </label>
+      </div>
+
+      <div class="form-row">
         <label>2nd place %:
           <input type="number" id="payoutSecondPercent" min="0" max="100" value="30" />
         </label>
+        <label>2nd place (fixed):
+          <input type="number" id="payoutSecondFixed" min="0" step="0.01" placeholder="optional" />
+        </label>
+      </div>
+
+      <div class="form-row">
         <label>3rd place %:
           <input type="number" id="payoutThirdPercent" min="0" max="100" value="10" />
+        </label>
+        <label>3rd place (fixed):
+          <input type="number" id="payoutThirdFixed" min="0" step="0.01" placeholder="optional" />
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>4th place %:
+          <input type="number" id="payoutFourthPercent" min="0" max="100" value="0" />
+        </label>
+        <label>4th place (fixed):
+          <input type="number" id="payoutFourthFixed" min="0" step="0.01" placeholder="optional" />
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>5th place %:
+          <input type="number" id="payoutFifthPercent" min="0" max="100" value="0" />
+        </label>
+        <label>5th place (fixed):
+          <input type="number" id="payoutFifthFixed" min="0" step="0.01" placeholder="optional" />
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>6th place %:
+          <input type="number" id="payoutSixthPercent" min="0" max="100" value="0" />
+        </label>
+        <label>6th place (fixed):
+          <input type="number" id="payoutSixthFixed" min="0" step="0.01" placeholder="optional" />
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>Team Out %:
+          <input type="number" id="payoutTeamOutPercent" min="0" max="100" value="0" />
+        </label>
+        <label>Team Out (fixed):
+          <input type="number" id="payoutTeamOutFixed" min="0" step="0.01" placeholder="optional" />
         </label>
       </div>
 
@@ -370,17 +446,15 @@
         <label>Honey Pot per player (if active):
           <input type="number" id="honeyPotPerPlayer" min="0" step="0.01" value="10" />
         </label>
-        <div>
-          <div class="note">
-            Honey Pot triggers automatically if at least 4 female players are registered.<br />
-            Last female team gets Honey Pot (2 × amount per player).
-          </div>
-        </div>
+        <label>Min female players for Honey Pot:
+          <input type="number" id="honeyPotThreshold" min="1" value="4" />
+        </label>
       </div>
 
       <button type="button" id="calculate-payouts-btn">Calculate Payouts</button>
       <p class="note">
-        If "Total pot" is filled, it will be used directly. Otherwise, total pot = entry fee × number of paid players.
+        If "Total pot" is filled, it is used directly. Otherwise, total pot = entry fee × number of paid players.
+        Fixed amounts override percentages where provided.
       </p>
     </form>
 
@@ -393,9 +467,7 @@
           <th>Amount</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Filled by JS -->
-      </tbody>
+      <tbody></tbody>
     </table>
 
     <p class="note" id="payouts-info"></p>
@@ -403,9 +475,9 @@
 
   <footer>
     <p>
-      V1: players (+ payment, saved database), teams, winner & loser brackets (2-loss elimination),
-      king seat finals, Mystery Out (1–180 full board with possible/No Out), payout calculator,
-      standings, save/load, and display mode for pub view.
+      DartsTournament – Players, Teams, Double-Elim Brackets (with boards),
+      King Seat Finals, Mystery Out, Big Hits, Payouts, Save/Load, Court Assignments,
+      and offline/online browser support.
     </p>
   </footer>
 
